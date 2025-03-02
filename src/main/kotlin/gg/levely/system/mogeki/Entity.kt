@@ -1,10 +1,12 @@
 package gg.levely.system.mogeki
 
+import java.util.concurrent.ConcurrentHashMap
+
 class Entity {
 
-    val components = mutableMapOf<Key<out Component>, Component>()
+    private val components = ConcurrentHashMap<Key<out Component>, Component>()
 
-    fun <T : Component> addComponent(key: Key<T>, component: T) {
+    fun <T : Component> setComponent(key: Key<T>, component: T) {
         components[key] = component
     }
 
@@ -12,12 +14,22 @@ class Entity {
         return components[key] as? T
     }
 
+    fun <T : Component> requireComponent(key: Key<T>): T {
+        return components[key] as? T
+            ?: throw NoSuchElementException("No component found for key: ${key.name}")
+    }
+
     fun <T : Component> hasComponent(key: Key<T>): Boolean {
         return components.containsKey(key)
     }
 
-    fun <T : Component> removeComponent(key: Key<T>) {
-        components.remove(key)
+    fun <T : Component> removeComponent(key: Key<T>): Boolean {
+        return components.remove(key) != null
+    }
+
+    fun getComponents(): Map<Key<out Component>, Component> {
+        return components.toMap()
     }
 
 }
+
