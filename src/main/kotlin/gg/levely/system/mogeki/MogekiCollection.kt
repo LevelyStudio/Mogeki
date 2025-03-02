@@ -1,6 +1,8 @@
 package gg.levely.system.mogeki
 
 import com.mongodb.client.MongoCollection
+import com.mongodb.client.model.CreateIndexOptions
+import com.mongodb.client.model.IndexModel
 import com.mongodb.client.model.Projections
 import com.mongodb.client.model.UpdateOptions
 import org.bson.Document
@@ -15,13 +17,18 @@ class MogekiCollection(
     val database = mongoDriver.getDatabase()
     val collection: MongoCollection<Document> = database.getCollection(name)
 
+    @JvmOverloads
+    fun createIndex(index: IndexModel, indexOptions: CreateIndexOptions = CreateIndexOptions()) {
+        collection.createIndexes(listOf(index), indexOptions)
+    }
+
     fun getEntity(filter: Bson): Entity? {
-        val document = collection.find(filter).first() ?: return null
+        val document = collection.find(filter).firstOrNull() ?: return null
         val entity = Entity()
         document.forEach { (key, value) ->
             val componentCodec = componentCodecRepository.getCodecByName(key) ?: return@forEach
             val component = componentCodec.unMarshal(value)
-            entity.addComponent(componentCodecRepository.getKey(key)!!, component)
+            entity.setComponent(componentCodecRepository.getKey(key)!!, component)
         }
 
         return entity
@@ -30,14 +37,14 @@ class MogekiCollection(
     fun getEntity(filter: Bson, vararg keys: Key<out Component>): Entity? {
         val document = collection.find(filter)
             .projection(Projections.fields(Projections.include(keys.map { it.name }), Projections.excludeId()))
-            .first() ?: return null
+            .firstOrNull() ?: return null
 
         val entity = Entity()
         keys.forEach { key ->
             val componentCodec = componentCodecRepository.getCodec(key) ?: return@forEach
             val value = document[key.name] ?: return@forEach
             val component: Component = componentCodec.unMarshal(value)
-            entity.addComponent(key as Key<Component>, component)
+            entity.setComponent(key as Key<Component>, component)
         }
 
         return entity
@@ -47,7 +54,7 @@ class MogekiCollection(
         val componentCodec = componentCodecRepository.getCodec(key) ?: return null
         val value = collection.find(filter)
             .projection(Projections.fields(Projections.include(key.name), Projections.excludeId()))
-            .first()
+            .firstOrNull()
             ?.get(key.name) ?: return null
 
         return componentCodec.unMarshal(value)
@@ -61,7 +68,7 @@ class MogekiCollection(
 
     fun upsertEntity(filter: Bson, entity: Entity) {
         val document = Document()
-        entity.components.forEach { (key, value) ->
+        entity.getComponents().forEach { (key, value) ->
             val componentCodec =
                 componentCodecRepository.getCodec(key) as? ComponentCodec<Component, Any> ?: return@forEach
             document[key.name] = componentCodec.marshal(value)
