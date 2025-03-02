@@ -1,6 +1,5 @@
 package gg.levely.system.mogeki
 
-
 class Mogeki(val mongoDriver: MongoDriver) {
 
     private val mogekiCollections = mutableMapOf<String, MogekiCollection>()
