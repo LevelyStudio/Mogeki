@@ -1,5 +1,7 @@
-package gg.levely.system.mogeki
+package gg.levely.system.mogeki.codec
 
+import gg.levely.system.mogeki.Component
+import gg.levely.system.mogeki.Key
 import java.util.concurrent.ConcurrentHashMap
 
 class ComponentCodecRepository {

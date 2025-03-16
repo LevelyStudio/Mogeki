@@ -1,9 +1,11 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '2.1.10'
+    id 'maven-publish'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.25'
 }
 
 group = 'gg.levely'
 version = project.version
+
 
 repositories {
     mavenCentral()
@@ -16,9 +18,37 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.5.17'
 }
 
-test {
-    useJUnitPlatform()
+java {
+    withSourcesJar()
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'gg.levely.system'
+            artifactId = 'mogeki'
+
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/${System.getenv("GITHUB_REPOSITORY")}")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+                password = project.findProperty("gpr.token") ?: System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
+
 kotlin {
     jvmToolchain(8)
 }
