@@ -3,6 +3,8 @@ import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.codec.ComponentCodec
 import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.Mogeki
+import gg.levely.system.mogeki.codec.ComponentCodecRepository
+import gg.levely.system.mogeki.codec.registerString
 import gg.levely.system.mogeki.component.StringComponent
 import gg.levely.system.mogeki.component.getValuableComponent
 import gg.levely.system.mogeki.fieldPath
@@ -12,22 +14,14 @@ import kotlin.reflect.KProperty1
 
 class MogekiTest {
 
-    lateinit var mogeki: Mogeki
-
     val NAME_COMPONENT = key<NameComponent>("name")
     val TYPE_COMPONENT = key<TypeComponent>("type")
     val TEST = key<StringComponent>("hello")
 
     init {
-        val componentCodecRepository = mogeki.componentCodecRepository
+        val componentCodecRepository = ComponentCodecRepository()
         componentCodecRepository.register(NAME_COMPONENT, NameComponentCodec())
-
-        val mogekiCollection = mogeki.getMogekiCollection("test")
-        val entity = mogekiCollection.getEntity(TYPE_COMPONENT.filter("foo"))
-        var value = entity?.getValuableComponent(TEST)
-
-        println(entity)
-
+        componentCodecRepository.registerString(TEST)
 
         val fieldPath = fieldPath<TypeComponent> {
             field(TypeComponent::origin) {
@@ -37,6 +31,10 @@ class MogekiTest {
 
         println(fieldPath)
     }
+}
+
+fun main() {
+    MogekiTest()
 }
 
 class NameComponent(

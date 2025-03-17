@@ -42,4 +42,8 @@ class MongoDriver(uri: String, defaultDatabase: String) {
         return mongoClient
     }
 
+    fun close() {
+        mongoClient.close()
+    }
+
 }

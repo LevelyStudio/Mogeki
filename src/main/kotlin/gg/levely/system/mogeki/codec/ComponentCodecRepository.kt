@@ -10,7 +10,7 @@ class ComponentCodecRepository {
     private val keyByName = ConcurrentHashMap<String, Key<out Component>>()
 
     fun <T : Component> register(key: Key<T>, codec: ComponentCodec<T, *>) {
-        require(!Component::class.java.isAssignableFrom(key.value.java)) { "Key must be a subclass of Component" }
+        require(!key.value.java.isAssignableFrom(Component::class.java)) { "${key.value} is not a subclass of Component" }
 
         codecs[key] = codec as ComponentCodec<out Component, Any>
         keyByName[key.name] = key
@@ -33,13 +33,24 @@ class ComponentCodecRepository {
             ?: throw NoSuchElementException("No key found for name: $name")
     }
 
+    fun  getKeyOrNull(name: String): Key<*>? {
+        return keyByName[name]
+    }
+
     fun <T : Component> unregister(key: Key<T>) {
         codecs.remove(key)
         keyByName.values.removeIf { it == key }
     }
+
+    fun getRegisteredKeys(): Set<Key<out Component>> {
+        return codecs.keys
+    }
 }
 
 interface ComponentCodec<I : Component, O> {
+
     fun marshal(component: I): O
+
     fun unMarshal(output: O): I
+
 }

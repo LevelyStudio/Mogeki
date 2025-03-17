@@ -78,4 +78,11 @@ open class MogekiCollection(
         collection.updateOne(filter, Document("\$set", document), UpdateOptions().upsert(true))
     }
 
+
+    fun exists(filter: Bson, vararg projectionKeys: Key<*> = emptyArray<Key<*>>()): Boolean {
+        return collection.find(filter)
+            .projection(Projections.fields(Projections.include(projectionKeys.map { it.name }), Projections.excludeId()))
+            .firstOrNull() != null
+    }
+
 }
