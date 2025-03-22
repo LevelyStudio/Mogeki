@@ -3,7 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.9.25'
 }
 
-group = 'gg.levely'
+group = 'gg.levely.system'
 version = project.version
 
 
