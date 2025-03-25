@@ -28,8 +28,9 @@ open class MogekiCollection(
         val entity = Entity()
         document.forEach { (key, value) ->
             val componentCodec = componentCodecRepository.getCodecByName(key)
-            val component = componentCodec.unMarshal(value)
-            entity.setComponent(componentCodecRepository.getKey(key), component)
+            val component = componentCodec?.unMarshal(value) ?: return@forEach
+            val lKey = componentCodecRepository.getKey<Component>(key) ?: return@forEach
+            entity.setComponent(lKey, component)
         }
 
         return entity
@@ -44,7 +45,7 @@ open class MogekiCollection(
         keys.forEach { key ->
             val componentCodec = componentCodecRepository.getCodec(key)
             val value = document[key.name] ?: return@forEach
-            val component: Component = componentCodec.unMarshal(value)
+            val component: Component = componentCodec?.unMarshal(value) ?: return@forEach
             entity.setComponent(key as Key<Component>, component)
         }
 
@@ -52,7 +53,7 @@ open class MogekiCollection(
     }
 
     fun <T : Component> getComponent(filter: Bson, key: Key<T>): T? {
-        val componentCodec = componentCodecRepository.getCodec(key)
+        val componentCodec = componentCodecRepository.getCodec(key)?: return null
         val value = collection.find(filter)
             .projection(Projections.fields(Projections.include(key.name), Projections.excludeId()))
             .firstOrNull()
@@ -62,7 +63,7 @@ open class MogekiCollection(
     }
 
     fun <T : Component> upsertComponent(filter: Bson, key: Key<T>, component: T) {
-        val componentCodec = componentCodecRepository.getCodec(key)
+        val componentCodec = componentCodecRepository.getCodec(key)?: return
         val value = componentCodec.marshal(component)
         collection.updateOne(filter, Document("\$set", Document(key.name, value)), UpdateOptions().upsert(true))
     }
@@ -81,7 +82,12 @@ open class MogekiCollection(
 
     fun exists(filter: Bson, vararg projectionKeys: Key<*> = emptyArray<Key<*>>()): Boolean {
         return collection.find(filter)
-            .projection(Projections.fields(Projections.include(projectionKeys.map { it.name }), Projections.excludeId()))
+            .projection(
+                Projections.fields(
+                    Projections.include(projectionKeys.map { it.name }),
+                    Projections.excludeId()
+                )
+            )
             .firstOrNull() != null
     }
 
