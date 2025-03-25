@@ -16,24 +16,20 @@ class ComponentCodecRepository {
         keyByName[key.name] = key
     }
 
-    fun <T : Component> getCodec(key: Key<T>): ComponentCodec<T, Any> {
+    fun <T : Component> getCodec(key: Key<T>): ComponentCodec<T, Any>? {
         return codecs[key] as? ComponentCodec<T, Any>
-            ?: throw NoSuchElementException("No codec found for key: ${key.name}")
     }
 
-    fun getCodecByName(name: String): ComponentCodec<Component, Any> {
-        val key = keyByName[name]
-            ?: throw NoSuchElementException("No key found for name: $name")
+    fun getCodecByName(name: String): ComponentCodec<Component, Any>? {
+        val key = keyByName[name]?: return null
         return codecs[key] as? ComponentCodec<Component, Any>
-            ?: throw NoSuchElementException("No codec found for key: $name")
     }
 
-    fun <T : Component> getKey(name: String): Key<T> {
+    fun <T : Component> getKey(name: String): Key<T>? {
         return keyByName[name] as? Key<T>
-            ?: throw NoSuchElementException("No key found for name: $name")
     }
 
-    fun  getKeyOrNull(name: String): Key<*>? {
+    fun getRawKey(name: String): Key<*>? {
         return keyByName[name]
     }
 
