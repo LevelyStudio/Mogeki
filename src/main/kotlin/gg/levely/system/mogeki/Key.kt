@@ -32,3 +32,7 @@ fun keyFloat(name: String): Key<FloatComponent> = key(name)
 fun keyDouble(name: String): Key<DoubleComponent> = key(name)
 
 fun keyByteArray(name: String): Key<ByteArrayComponent> = key(name)
+
+fun keyRawDocument(name: String): Key<RawDocumentComponent> = key(name)
+
+fun keyEntity(name: String): Key<EntityComponent> = key(name)
