@@ -80,6 +80,7 @@ open class MogekiCollection(
     }
 
 
+    @JvmOverloads
     fun exists(filter: Bson, vararg projectionKeys: Key<*> = emptyArray<Key<*>>()): Boolean {
         return collection.find(filter)
             .projection(
