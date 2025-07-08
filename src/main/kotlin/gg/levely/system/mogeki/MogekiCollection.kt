@@ -53,7 +53,7 @@ open class MogekiCollection(
     }
 
     fun <T : Component> getComponent(filter: Bson, key: Key<T>): T? {
-        val componentCodec = componentCodecRepository.getCodec(key)?: return null
+        val componentCodec = componentCodecRepository.getCodec(key) ?: return null
         val value = collection.find(filter)
             .projection(Projections.fields(Projections.include(key.name), Projections.excludeId()))
             .firstOrNull()
@@ -63,7 +63,7 @@ open class MogekiCollection(
     }
 
     fun <T : Component> upsertComponent(filter: Bson, key: Key<T>, component: T) {
-        val componentCodec = componentCodecRepository.getCodec(key)?: return
+        val componentCodec = componentCodecRepository.getCodec(key) ?: return
         val value = componentCodec.marshal(component)
         collection.updateOne(filter, Document("\$set", Document(key.name, value)), UpdateOptions().upsert(true))
     }

@@ -21,7 +21,7 @@ class ComponentCodecRepository {
     }
 
     fun getCodecByName(name: String): ComponentCodec<Component, Any>? {
-        val key = keyByName[name]?: return null
+        val key = keyByName[name] ?: return null
         return codecs[key] as? ComponentCodec<Component, Any>
     }
 

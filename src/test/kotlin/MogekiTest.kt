@@ -1,12 +1,10 @@
 import com.mongodb.client.model.Filters
 import gg.levely.system.mogeki.Component
-import gg.levely.system.mogeki.codec.ComponentCodec
 import gg.levely.system.mogeki.Key
-import gg.levely.system.mogeki.Mogeki
+import gg.levely.system.mogeki.codec.ComponentCodec
 import gg.levely.system.mogeki.codec.ComponentCodecRepository
 import gg.levely.system.mogeki.codec.registerString
 import gg.levely.system.mogeki.component.StringComponent
-import gg.levely.system.mogeki.component.getValuableComponent
 import gg.levely.system.mogeki.fieldPath
 import gg.levely.system.mogeki.key
 import org.bson.conversions.Bson
@@ -44,7 +42,7 @@ class NameComponent(
 
 data class TypeComponent(
     var type: String,
-    var origin: OriginComponent
+    var origin: OriginComponent,
 ) : Component
 
 data class OriginComponent(
@@ -64,7 +62,7 @@ class NameComponentCodec : ComponentCodec<NameComponent, String> {
 }
 
 fun getDeepFieldPath(key: Key<*>, vararg properties: KProperty1<*, *>): String {
-    if (properties.isEmpty()){
+    if (properties.isEmpty()) {
         return key.name
     }
 

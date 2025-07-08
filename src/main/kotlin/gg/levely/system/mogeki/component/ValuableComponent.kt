@@ -3,8 +3,6 @@ package gg.levely.system.mogeki.component
 import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.Entity
 import gg.levely.system.mogeki.Key
-import gg.levely.system.mogeki.MogekiCollection
-import org.bson.conversions.Bson
 
 interface ValuableComponent<T> : Component {
 

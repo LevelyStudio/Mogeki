@@ -1,6 +1,5 @@
 package gg.levely.system.mogeki.component
 
-import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.Entity
 import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.codec.ComponentCodec
@@ -19,6 +18,6 @@ object IntComponentCodec : ComponentCodec<IntComponent, Int> {
 
 }
 
-fun <T: ValuableComponent<Int>> Entity.setComponent(key: Key<T>, value: Int) {
+fun <T : ValuableComponent<Int>> Entity.setComponent(key: Key<T>, value: Int) {
     setComponent(key, IntComponent(value) as T)
 }

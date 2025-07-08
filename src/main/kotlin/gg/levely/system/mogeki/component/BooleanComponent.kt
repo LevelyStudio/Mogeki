@@ -1,6 +1,5 @@
 package gg.levely.system.mogeki.component
 
-import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.Entity
 import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.codec.ComponentCodec
@@ -17,6 +16,6 @@ object BooleanComponentCodec : ComponentCodec<BooleanComponent, Boolean> {
 
 }
 
-fun <T : ValuableComponent<Boolean>> Entity.setComponent(key: Key<T>, value: Boolean)  {
+fun <T : ValuableComponent<Boolean>> Entity.setComponent(key: Key<T>, value: Boolean) {
     setComponent(key, BooleanComponent(value) as T)
 }

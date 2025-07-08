@@ -1,6 +1,5 @@
 package gg.levely.system.mogeki.component
 
-import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.Entity
 import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.codec.ComponentCodec
@@ -23,6 +22,6 @@ object ByteArrayComponentCodec : ComponentCodec<ByteArrayComponent, Any> {
 
 }
 
-fun <T: ValuableComponent<ByteArray>> Entity.setComponent(key: Key<T>, value: ByteArray) {
+fun <T : ValuableComponent<ByteArray>> Entity.setComponent(key: Key<T>, value: ByteArray) {
     setComponent(key, ByteArrayComponent(value) as T)
 }

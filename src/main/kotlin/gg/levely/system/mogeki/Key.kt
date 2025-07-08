@@ -1,13 +1,7 @@
 package gg.levely.system.mogeki
 
 
-import gg.levely.system.mogeki.component.BooleanComponent
-import gg.levely.system.mogeki.component.ByteArrayComponent
-import gg.levely.system.mogeki.component.DoubleComponent
-import gg.levely.system.mogeki.component.FloatComponent
-import gg.levely.system.mogeki.component.IntComponent
-import gg.levely.system.mogeki.component.LongComponent
-import gg.levely.system.mogeki.component.StringComponent
+import gg.levely.system.mogeki.component.*
 import kotlin.reflect.KClass
 
 interface Key<T : Component> {
@@ -15,9 +9,9 @@ interface Key<T : Component> {
     val value: KClass<T>
 }
 
-class KeyImpl<T : Component> (
+class KeyImpl<T : Component>(
     override val name: String,
-    override val value: KClass<T>
+    override val value: KClass<T>,
 ) : Key<T>
 
 
