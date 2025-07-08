@@ -30,3 +30,15 @@ fun ComponentCodecRepository.registerByteArray(key: Key<ByteArrayComponent>) {
 fun ComponentCodecRepository.registerLong(key: Key<LongComponent>) {
     register(key, LongComponentCodec)
 }
+
+fun ComponentCodecRepository.registerRawDocument(key: Key<RawDocumentComponent>) {
+    register(key, RawDocumentComponentCodec)
+}
+
+fun ComponentCodecRepository.registerEntity(key: Key<EntityComponent>) {
+    registerEntity(key, this)
+}
+
+fun ComponentCodecRepository.registerEntity(key: Key<EntityComponent>, componentCodecRepository: ComponentCodecRepository) {
+    register(key, EntityComponentCodec(componentCodecRepository))
+}
