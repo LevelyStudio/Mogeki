@@ -44,5 +44,4 @@ class Entity {
         return components.hashCode()
     }
 
-
 }
