@@ -8,6 +8,19 @@ class IntComponent(private val value: Int) : ValuableComponent<Int> {
 
     override fun getValue() = value
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as IntComponent
+
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value
+    }
+
 }
 
 object IntComponentCodec : ComponentCodec<IntComponent, Int> {

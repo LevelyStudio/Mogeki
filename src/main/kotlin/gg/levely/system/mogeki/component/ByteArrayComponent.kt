@@ -9,6 +9,19 @@ class ByteArrayComponent(private val value: ByteArray) : ValuableComponent<ByteA
 
     override fun getValue() = value
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ByteArrayComponent
+
+        return value.contentEquals(other.value)
+    }
+
+    override fun hashCode(): Int {
+        return value.contentHashCode()
+    }
+
 }
 
 object ByteArrayComponentCodec : ComponentCodec<ByteArrayComponent, Any> {
