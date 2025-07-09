@@ -1,5 +1,7 @@
 package gg.levely.system.mogeki.component
 
+import gg.levely.system.mogeki.Entity
+import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.codec.ComponentCodec
 import org.bson.Document
 
@@ -32,5 +34,9 @@ object RawDocumentComponentCodec : ComponentCodec<RawDocumentComponent, Document
         return RawDocumentComponent(output)
     }
 
+}
+
+fun <T : ValuableComponent<Document>> Entity.setComponent(key: Key<T>, value: Document) {
+    setComponent(key, RawDocumentComponent(value) as T)
 }
 

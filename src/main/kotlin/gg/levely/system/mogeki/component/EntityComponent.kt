@@ -2,6 +2,7 @@ package gg.levely.system.mogeki.component
 
 import gg.levely.system.mogeki.Component
 import gg.levely.system.mogeki.Entity
+import gg.levely.system.mogeki.Key
 import gg.levely.system.mogeki.codec.ComponentCodec
 import gg.levely.system.mogeki.codec.ComponentCodecRepository
 import org.bson.Document
@@ -54,4 +55,8 @@ class EntityComponentCodec(val componentCodecRepository: ComponentCodecRepositor
 
         return EntityComponent(entity)
     }
+}
+
+fun <T : ValuableComponent<Entity>> Entity.setComponent(key: Key<T>, value: Entity) {
+    setComponent(key, EntityComponent(value) as T)
 }
