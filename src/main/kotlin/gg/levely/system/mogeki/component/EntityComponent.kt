@@ -57,6 +57,6 @@ class EntityComponentCodec(val componentCodecRepository: ComponentCodecRepositor
     }
 }
 
-fun <T : ValuableComponent<Entity>> Entity.setComponent(key: Key<T>, value: Entity) {
-    setComponent(key, EntityComponent(value) as T)
+fun Entity.setComponent(key: Key<EntityComponent>, value: Entity) {
+    setComponent(key, EntityComponent(value) as EntityComponent)
 }
