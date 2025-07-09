@@ -79,6 +79,16 @@ open class MogekiCollection(
         collection.updateOne(filter, Document("\$set", document), UpdateOptions().upsert(true))
     }
 
+    fun insertEntity(entity: Entity) {
+        val document = Document()
+        entity.getComponents().forEach { (key, value) ->
+            val componentCodec =
+                componentCodecRepository.getCodec(key) as? ComponentCodec<Component, Any> ?: return@forEach
+            document[key.name] = componentCodec.marshal(value)
+        }
+
+        collection.insertOne(document)
+    }
 
     @JvmOverloads
     fun exists(filter: Bson, vararg projectionKeys: Key<*> = emptyArray<Key<*>>()): Boolean {
